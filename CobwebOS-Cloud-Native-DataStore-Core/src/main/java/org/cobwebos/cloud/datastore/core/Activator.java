@@ -16,17 +16,74 @@
  */
 package org.cobwebos.cloud.datastore.core;
 
+import java.io.File;
+
+import org.cobwebos.cloud.datastore.core.utils.CliUtil;
+import org.cobwebos.cloud.datastore.core.utils.CobwebosUtils;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+/**
+ * 
+ * @author cobwebos
+ * @version 1.0.0
+ *
+ */
 public class Activator implements BundleActivator {
 
-    public void start(BundleContext context) {
-        System.out.println("Starting the bundle");
-    }
+	private Logger log = LoggerFactory.getLogger(Activator.class);
 
-    public void stop(BundleContext context) {
-        System.out.println("Stopping the bundle");
-    }
+	static {
+		CobwebosUtils.getInstance().initLog4j();
+		CobwebosUtils.getInstance().initCobwebosCfg();
+	}
+
+	public void start(BundleContext context) {
+		log.info("begin to Starting the bundle");
+		log.info("cobwebos cfg props:{}", CobwebosUtils.getInstance().getProperties());
+		doStart();
+		log.info("end to Starting the bundle");
+	}
+
+	public void stop(BundleContext context) {
+		log.info("begin to Stopping the bundle");
+		doStop();
+		log.info("end to Stopping the bundle");
+	}
+
+	public void doStart() {
+		log.info("Starting the cobwebos platform");
+
+		String command = CobwebosUtils.getInstance().getCobwebosRootDir() + "bin" + File.separator
+				+ "start-cobwebos.sh";
+		if (CobwebosUtils.getInstance().isWindows()) {
+			command = CobwebosUtils.getInstance().getCobwebosRootDir() + "bin" + File.separator
+					+ "start-cobwebos.bat";
+		}
+		log.info("getCobwebosRootDir:" + CobwebosUtils.getInstance().getCobwebosRootDir());
+		log.info("command:" + command);
+		CliUtil cli = new CliUtil();
+		cli.executeCommand(command);
+		
+	}
+
+	public void doStop() {
+		log.info("Stopping the cobwebos platform");
+		String command = CobwebosUtils.getInstance().getCobwebosRootDir() + "bin" + File.separator
+				+ "stop-cobwebos.sh";
+		if (CobwebosUtils.getInstance().isWindows()) {
+			command = CobwebosUtils.getInstance().getCobwebosRootDir() + "bin" + File.separator + "stop-cobwebos.bat";
+		}
+		log.info("getCobwebosRootDir:" + CobwebosUtils.getInstance().getCobwebosRootDir());
+		log.info("command:" + command);
+		CliUtil cli = new CliUtil();
+		cli.executeCommand(command);
+		
+
+	}
 
 }

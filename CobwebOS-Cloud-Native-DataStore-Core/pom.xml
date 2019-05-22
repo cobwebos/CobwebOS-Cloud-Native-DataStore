@@ -48,6 +48,21 @@
             <version>${osgi.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
     </dependencies>
 
     <build>
@@ -63,7 +78,10 @@
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Bundle-Activator>org.cobwebos.cloud.datastore.core.Activator</Bundle-Activator>
                         <Export-Package>org.cobwebos.cloud.datastore.core*;version=${project.version}</Export-Package>
-                        <Import-Package>*</Import-Package>
+                         <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+						<Embed-Directory>target/dependency</Embed-Directory>
+						<Embed-Transitive>true</Embed-Transitive>
+						<Import-Package>*;resolution:=optional</Import-Package>
                     </instructions>
                 </configuration>
             </plugin>
